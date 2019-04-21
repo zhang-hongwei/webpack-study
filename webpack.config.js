@@ -3,7 +3,7 @@
  * @LastEditors: ZHW
  * @Description:
  * @Date: 2019-04-21 21:54:34
- * @LastEditTime: 2019-04-21 22:45:05
+ * @LastEditTime: 2019-04-21 23:14:21
  */
 
 let path = require("path");
@@ -17,17 +17,46 @@ module.exports = {
         filename: "main.[hash:8].js",
         path: path.resolve(__dirname, "dist")
     },
+    module: {
+        // loader 特点 : 功能单一，可以组合使用，需要主义顺序 右==>左 下==>上
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader",
+                        options: {
+                            insertAt: "top"
+                        }
+                    },
+                    "css-loader"
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    {
+                        loader: "style-loader",
+                        options: {
+                            insertAt: "top"
+                        }
+                    },
+                    "css-loader",
+                    "less-loader"
+                ]
+            }
+        ]
+    },
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: "./index.html",
             filename: "index.html",
             minify: {
-                removeAttributeQuotes: true
+                // removeAttributeQuotes: true
             },
             hash: true
         })
-       
     ],
     devServer: {
         port: 9009,

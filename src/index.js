@@ -1,4 +1,5 @@
-
+require("./style/index.css");
+require("./style/indexs.less");
 
 function fn (){
     let x = 12321;
