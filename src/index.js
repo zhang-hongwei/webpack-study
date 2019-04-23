@@ -1,32 +1,7 @@
-require("./style/index.css");
-require("./style/indexs.less");
-
-function fn (){
-    let x = 12321;
-    let a = "ssssss"
-    console.log(x);
-
-    return a
+let xhr = new XMLHttpRequest();
+xhr.open("GET","api/user");
+xhr.onload = function(res){
+    console.log(res);
 }
 
-console.log("hellow world")
-
-fn()
-
-console.log(fn())
-
-
-
-function f1 (){
-    let x = 12321;
-    let a = "ssssss"
-    console.log(x);
-
-    return a
-}
-
-console.log("hellow world")
-
-f1()
-
-console.log(f1())
+xhr.send();
