@@ -17,67 +17,63 @@ let CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     mode: "development",
-    entry: {
-        home: "./src/index.js",
-        other: "./src/a.js"
-    },
+    entry: "./src/index.js",
     output: {
         filename: "main.[hash:8].js",
-        path: path.resolve(__dirname, "dist")
+        path: path.resolve(__dirname, "dist"),
+        // library: "ab"
     },
 
     module: {
-        noParse: /jquery|echarts|vue|axios/,
-        // loader 特点 : 功能单一，可以组合使用，需要主义顺序 右==>左 下==>上
         rules: [
             {
-                test: /\.css$/,
+                test: /\.(css|less)/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "postcss-loader"
-                ]
-            },
-            {
-                test: /\.less$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    "css-loader",
+                    {
+                        loader: "css-loader"
+                    },
                     "postcss-loader",
                     "less-loader"
                 ]
             },
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-env", "@babel/preset-react"]
+                test: /\.(js|jsx)/,
+                use: [
+                    {
+                        loader: "babel-loader"
                     }
-                }
+                ],
+                exclude: /node_modules/
             }
         ]
     },
 
     plugins: [
-        new CleanWebpackPlugin(),
+        new webpack.DefinePlugin({
+            PRODUCTION: JSON.stringify(true),
+            VERSION: JSON.stringify("5fa3b9"),
+            BROWSER_SUPPORTS_HTML5: true,
+            TWO: "1+1",
+            "typeof window": JSON.stringify("object"),
+            ENV: JSON.stringify("dev"),
+            DEV: JSON.stringify("dev")
+        }),
         new HtmlWebpackPlugin({
             template: "./index.html",
             filename: "index.html",
-            minify: {
-                // removeAttributeQuotes: true
-            },
             hash: true
-        })
+        }),
+        new MiniCssExtractPlugin({
+            filename: "main.css"
+        }),
+        new CleanWebpackPlugin(),
+        new OptimizeCssAssetsWebpackPlugin()
     ],
+
     devServer: {
-        port: 9009,
-        proxy: {
-            '/api': {
-                target: 'http://localhost:5005',
-                pathRewrite: {'^/api' : ''}
-              }
-        }
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+        port: 9000
     }
 };

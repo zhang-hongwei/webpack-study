@@ -1,7 +1,5 @@
-let xhr = new XMLHttpRequest();
-xhr.open("GET","api/user");
-xhr.onload = function(res){
-    console.log(res);
-}
+import React, { Component } from "react";
+import { render } from "react-dom";
+import A from "./a.js";
 
-xhr.send();
+render(<A></A>, document.querySelector("#root"));
